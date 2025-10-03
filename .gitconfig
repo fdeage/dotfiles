@@ -1,0 +1,112 @@
+# cf. https://blog.gitbutler.com/how-git-core-devs-configure-git/
+
+[user]
+	name = Félix Déage
+	email = felixdeage@fastmail.fr
+
+[user "github"]
+	name = fdeage
+	email = fdeage@users.noreply.github.com
+
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+
+[url "ssh://git@gitlab.com/"]
+	insteadOf = https://gitlab.com/
+
+[column]
+	ui = auto  # separate columns for multiple commands: branch, etc.
+
+[branch]
+	sort = -committerdate  # Sorts branches by the date of the last commit
+
+[tag]
+	sort = version:refname # Sorts tags based on version numbers
+
+[init]
+	defaultBranch = main
+
+[alias]
+	am = commit --amend
+	clean = clean -i # Clean untracked files (interactive)
+	co = checkout
+	cp = cherry-pick
+	fet = fetch origin -vvv
+	la = log --stat -1 HEAD
+	ll = show -1 HEAD
+	this = diff --staged
+	wdif = diff --word-diff
+	new = checkout -b
+	please = push --force-with-lease
+	qs = quick-stats
+	unstage = reset HEAD --
+	undo = reset --hard @{1}
+	root = rev-parse --show-toplevel
+	it = !sh -c 'git rebase -i HEAD~${1}' -
+	pop = !sh -c 'git stash pop stash@{$1}' -
+	drop = !sh -c 'git stash drop stash@{$1}' -
+	start = commit --allow-empty -m "Initial_commit"
+
+[color]
+	ui = always # Enables colored output for all Git commands
+
+
+[commit]
+	verbose = true # Includes the diff in commit messages, providing context
+
+[core]
+	editor = vim
+	excludesfile = ~/.gitignore_global
+	whitespace = cr-at-eol # Highlights carriage return characters at the EOL
+	eol = lf
+	autocrlf = input # cf. https://www.aleksandrhovhannisyan.com/blog/crlf-vs-lf-normalizing-line-endings-in-git/
+	ignorecase = true  # Useful on case-insensitive file systems.
+
+[credential]
+	helper = store
+
+[diff]
+	noPrefix = true  # Omits the default 'a/' and 'b/' prefixes in diff outputs
+	mnemonicPrefix = true  # Uses prefixes like 'i/' and 'w/' instead of 'a/' and 'b/'
+	renames = true  # Detects and displays file renames in diffs
+	algorithm = histogram  # Puts modifs closer together
+	colorMoved = plain  # Highlights moved lines without additional styling
+
+[tag]
+	sort = version:refname
+
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+
+[rebase]
+	autoSquash = true
+	autoStash = true
+	# updateRefs = true
+
+[merge]
+
+[merge]
+	conflictstyle = diff3      # adds the original text inbetween the two versions
+
+[pull]
+	ff = only  # Prevents unintended merge commits.
+	# rebase = false   # ff only overrides the rebase option
+
+[rerere]
+	enabled = true
+	autoupdate = true
+
+[push]
+	# default = current      # assumes same name on remote, avoids using -u every time
+	default = simple         # forces -u to set upstream
+	# default = upstream     # Default push should only push the current branch to its push target, regardless of its remote name
+	followTags = true
+	autoSetupRemote = true   # doesn't need git push -u for new branches
+
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
